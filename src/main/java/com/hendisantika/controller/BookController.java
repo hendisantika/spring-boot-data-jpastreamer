@@ -2,6 +2,8 @@ package com.hendisantika.controller;
 
 import com.hendisantika.entity.Book;
 import com.speedment.jpastreamer.application.JPAStreamer;
+import com.speedment.jpastreamer.projection.Projection;
+import com.speedment.jpastreamer.streamconfiguration.StreamConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +51,17 @@ public class BookController {
         return ResponseEntity.ok(
                 jpaStreamer.stream(Book.class)
                         .filter(Book$.title.contains(title))
+                        .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/books/sc/{title}")
+    public ResponseEntity<?> findBookByTitleUsingStreamConfig(@PathVariable String title) {
+        StreamConfiguration<Book> sc = StreamConfiguration
+                .of(Book.class)
+                .selecting(Projection.select(Book$.id, Book$.title));
+        return ResponseEntity.ok(
+                jpaStreamer.stream(sc)
+                        .filter(Book$.id.greaterThan(2L))
                         .collect(Collectors.toList()));
     }
 }
