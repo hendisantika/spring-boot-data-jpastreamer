@@ -1,16 +1,15 @@
-package com.hendisantika;
+package com.hendisantika.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,28 +18,24 @@ import lombok.Setter;
  * Email: hendisantika@gmail.com
  * Telegram : @hendisantika34
  * Date: 3/13/23
- * Time: 09:10
+ * Time: 09:09
  * To change this template use File | Settings | File Templates.
  */
 @Getter
 @Setter
-@Entity(name = "book")
-@NoArgsConstructor
+@Entity(name = "author")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Book {
+public class Author {
+
     @Id
     @GeneratedValue
     private Long id;
 
+    private String firstName;
+
     @Column(unique = true)
-    private String title;
+    private String lastName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "author_id")
-    private Author author;
-
-    public Book(Long id, String title) {
-        this.id = id;
-        this.title = title;
-    }
+    @OneToMany
+    private List<Book> books;
 }
