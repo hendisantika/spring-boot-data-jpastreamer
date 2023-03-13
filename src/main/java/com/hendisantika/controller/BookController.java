@@ -5,6 +5,7 @@ import com.speedment.jpastreamer.application.JPAStreamer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,4 +44,11 @@ public class BookController {
         return ResponseEntity.ok(ids);
     }
 
+    @GetMapping("/books/{title}")
+    public ResponseEntity<?> findBookByTitle(@PathVariable String title) {
+        return ResponseEntity.ok(
+                jpaStreamer.stream(Book.class)
+                        .filter(Book$.title.contains(title))
+                        .collect(Collectors.toList()));
+    }
 }
