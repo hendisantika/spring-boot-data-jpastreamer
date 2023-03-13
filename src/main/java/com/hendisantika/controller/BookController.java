@@ -64,4 +64,11 @@ public class BookController {
                         .filter(Book$.id.greaterThan(2L))
                         .collect(Collectors.toList()));
     }
+
+    @GetMapping("/author/{authorLastName}")
+    public ResponseEntity<?> findBookByAuthorLastName(@PathVariable String authorLastName) {
+        return ResponseEntity.ok(jpaStreamer.stream(Book.class)
+                .filter(k -> k.getAuthor().getLastName().contains(authorLastName))
+                .collect(Collectors.toList()));
+    }
 }
